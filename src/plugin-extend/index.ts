@@ -1,4 +1,4 @@
-import { Plugin, FileSystemAdapter } from "obsidian"
+import { Plugin, FileSystemAdapter, TFile, MarkdownView } from "obsidian"
 
 export default abstract class PluginExt<S> extends Plugin {
   settings: S
@@ -23,12 +23,13 @@ export default abstract class PluginExt<S> extends Plugin {
     return (this.app.vault.adapter as FileSystemAdapter).getFullPath(this.getPluginPath())
   }
 
-  async loadFileData<DataOfPath, P extends keyof DataOfPath>(path: P): Promise<DataOfPath[P] | null> {
+  async loadFileData<DataOfPath, P extends keyof DataOfPath>(path: P, defaultData: DataOfPath[P]): Promise<DataOfPath[P]> {
     let filePath = [this.getPluginPath(), path].join("/")
 
     const fileExist = await this.app.vault.adapter.exists(filePath)
     if(!fileExist) {
-        return null;
+      await this.writeFileDirectly(filePath, JSON.stringify(defaultData, null, 2))
+      return defaultData;
     }
 
     let data = await this.app.vault.adapter.read(filePath)
@@ -106,5 +107,23 @@ export default abstract class PluginExt<S> extends Plugin {
     this.app.workspace.revealLeaf(
       this.app.workspace.getLeavesOfType(viewType)[0]
     );
+  }
+
+  jumpTo(file: TFile, line: number) {
+    const leaves = this.app.workspace.getLeavesOfType("markdown");
+
+    const opened = leaves.find(leaf => (leaf.view as MarkdownView).file?.path === file.path);
+    if(opened) {
+      this.app.workspace.revealLeaf(opened);
+      (opened.view as MarkdownView).setEphemeralState({
+        line
+      });
+    } else {
+      this.app.workspace.getLeaf("tab").openFile(file, {
+        eState: {
+          line
+        }
+      });
+    }
   }
 }

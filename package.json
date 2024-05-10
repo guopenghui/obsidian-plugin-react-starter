@@ -30,6 +30,7 @@
     "obsidian": "latest",
     "ts-jest": "^29.1.2",
     "tslib": "2.4.0",
-    "typescript": "^5.2.2"
+    "typescript": "^5.2.2",
+    "undici": "^6.16.0"
   }
 }
