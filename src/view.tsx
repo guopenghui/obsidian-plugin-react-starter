@@ -4,7 +4,7 @@ import { createRoot, Root } from "react-dom/client"
 import type MyPlugin from "@/main"
 import { Counter } from "@/Counter"
 
-export const MY_VIEW: string = 'my-custom-view';
+export const MY_VIEW: string = 'my-react-starter-view';
 
 export class MyView extends ItemView {
   reactRoot: Root;

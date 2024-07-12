@@ -2,6 +2,9 @@ import esbuild from "esbuild";
 import process from "process";
 import builtins from "builtin-modules";
 import {inlineWorkerPlugin} from "@aidenlx/esbuild-plugin-inline-worker"
+import postCss from "esbuild-style-plugin"
+import tailwindcss from "tailwindcss"
+import autoprefixer from "autoprefixer"
 import fs from "fs";
 
 const changeCSSName = {
@@ -53,6 +56,11 @@ const context = await esbuild.context({
     inlineWorkerPlugin({
       watch: true,
       buildOptions: () => ({})
+    }),
+    postCss({
+      postcss: {
+        plugins: [tailwindcss, autoprefixer]
+      }
     })
   ],
   minify: prod,

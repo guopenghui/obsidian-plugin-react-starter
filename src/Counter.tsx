@@ -16,6 +16,6 @@ export function Counter() {
     const counter = useCounter();
     
     return (
-        <button onClick={counter.increment}>{counter.count}</button>
+        <button className="text-red-400 font-semibold w-8" onClick={counter.increment}>{counter.count}</button>
     )
 }

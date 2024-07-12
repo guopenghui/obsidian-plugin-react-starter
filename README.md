@@ -2,6 +2,7 @@
 
 ## Support Features
 + React
++ TailwindCss
 + Web Worker
 + Jest test framework
 
